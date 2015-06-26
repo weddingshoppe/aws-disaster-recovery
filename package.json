@@ -1,0 +1,27 @@
+{
+  "name": "aws-disaster-recovery",
+  "version": "0.1.0",
+  "description": "a [scriptable] command line to make disaster recovery simple and automated",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/weddingshoppe/aws-disaster-recovery"
+  },
+  "keywords": [
+    "cli",
+    "node"
+  ],
+  "author": "Jame Mackson <jame.mackson@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/weddingshoppe/aws-disaster-recovery/issues"
+  },
+  "homepage": "https://github.com/weddingshoppe/aws-disaster-recovery",
+  "dependencies": {
+    "resolve": "^1.1.6",
+    "soil-cli": "^1.2.5"
+  }
+}

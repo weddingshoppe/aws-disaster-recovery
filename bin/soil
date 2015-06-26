@@ -1,0 +1,22 @@
+#!/usr/bin/env node
+
+process.title = 'Soil Cli'
+
+var resolve  = require('resolve');
+var basepath = process.cwd();
+
+resolve('soil-cli-example', {
+  basedir: basepath
+}, function(err, localCLI) {
+
+  var CLI;
+  if (err) {
+    CLI = require('../lib/cli');
+  } else {
+    CLI = require(localCLI);
+  }
+
+  var cli = new CLI(process.argv.slice(2));
+
+  cli.command();
+});
