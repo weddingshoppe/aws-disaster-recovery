@@ -9,8 +9,9 @@
   },
   "scripts": {
     "test": "mocha test/",
-    "watch": "ls -d test/* lib/* lib/**/* | grep -v 'node_modules' | grep .es6 | xargs ./node_modules/.bin/babel -d ./ -w",
-    "build": "ls -d test/* lib/* lib/**/* | grep -v 'node_modules' | grep .es6 | xargs ./node_modules/.bin/babel -d ./"
+    "lint": "eslint -c .eslintrc src/",
+    "watch": "ls -d test/* lib/* lib/**/* | grep -v 'node_modules' | grep .es6 | xargs ./node_modules/.bin/babel -d ./lib ./src -w",
+    "build": "ls -d test/* lib/* lib/**/* | grep -v 'node_modules' | grep .es6 | xargs ./node_modules/.bin/babel -d ./lib ./src"
   },
   "repository": {
     "type": "git",
