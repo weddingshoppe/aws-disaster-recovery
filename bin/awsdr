@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 
-process.title = 'Soil Cli'
+process.title = 'aws disaster recovery'
 
 var resolve  = require('resolve');
 var basepath = process.cwd();
 
-resolve('soil-cli-example', {
+resolve('aws-disaster-recovery', {
   basedir: basepath
 }, function(err, localCLI) {
 

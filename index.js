@@ -1,1 +1,3 @@
-module.exports = require('./lib/cli');
+var path = require('path');
+
+module.exports = require(path.join(__dirname, 'lib', 'cli'));

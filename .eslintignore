@@ -1,0 +1,7 @@
+lib/helpers/*
+lib/cli.js
+lib/commands/backup.js
+lib/commands/help.js
+lib/settings/aliases.js
+lib/templates/*
+test/tests.js
