@@ -2,21 +2,19 @@
 
 process.title = 'aws disaster recovery'
 
+var path = require('path');
 var resolve  = require('resolve');
 var basepath = process.cwd();
 
 resolve('aws-disaster-recovery', {
-  basedir: basepath
-}, function(err, localCLI) {
-
-  var CLI;
-  if (err) {
-    CLI = require('../lib/cli');
+  basedir: process.cwd()
+}, function (error, localCliPath){
+  var cli;
+  if (error) {
+    // require global sane-cli
+    cli = require(path.join('..', 'lib', 'cli'));
   } else {
-    CLI = require(localCLI);
+    cli = require(path.join(localCliPath, '..', '..', 'lib', 'cli'));
   }
-
-  var cli = new CLI(process.argv.slice(2));
-
-  cli.command();
+  cli(process.argv);
 });
