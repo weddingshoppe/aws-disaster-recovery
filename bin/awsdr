@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-process.title = 'aws disaster recovery'
+process.title = 'aws disaster recovery';
 
 var path = require('path');
 var resolve  = require('resolve');
