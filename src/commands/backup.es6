@@ -22,16 +22,12 @@ module.exports = function backup(instanceid, options, aws) {
     }
     else {
       // successful response
-      //console.log(data);
-      //console.log('calling describeInstances was successful');
       //todo: look at changing these calls to use promises
       //https://github.com/jagregory/aws-es6-promise
       _.forEach(data.Reservations, function(n, key) {
-        //console.log('n is: ' + n);
-        //console.log(n, key);
-        //console.log('key is: ' + key);
-        //console.log('n.ReservationId is: ' + n.ReservationId);
+
         _.forEach(n.Instances, function(instance, key) {
+
           console.log(
             'starting backup of: ',
             _.padRight(chalk.red(instance.InstanceId), 14, ' '),
@@ -48,9 +44,11 @@ module.exports = function backup(instanceid, options, aws) {
             DryRun: false,
             NoReboot: true
           };
+
           ec2.createImage(params, function(err, data) {
             if (err) {
-              console.log(err, err.stack); // an error occurred
+              // an error occurred
+              console.log(err, err.stack);
             }
             else {
               // successful response
