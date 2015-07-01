@@ -28,13 +28,13 @@
   },
   "homepage": "https://github.com/weddingshoppe/aws-disaster-recovery",
   "dependencies": {
+    "aws-promised": "^2.3.0",
     "aws-sdk": "^2.1.36",
     "chalk": "^1.0.0",
     "commander": "^2.8.1",
     "dotenv": "^1.2.0",
     "lodash": "^3.9.3",
-    "resolve": "^1.1.6",
-    "rsvp": "^3.0.18"
+    "resolve": "^1.1.6"
   },
   "devDependencies": {
     "babel": "^5.5.8",
