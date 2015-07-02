@@ -32,3 +32,6 @@ node_modules
 
 #PHPStorm / WebStorm project file data
 .idea
+
+#environment variables file
+.env
