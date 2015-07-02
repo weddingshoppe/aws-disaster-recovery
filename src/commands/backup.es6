@@ -1,16 +1,17 @@
 var _                 = require('lodash');
 var chalk             = require('chalk');
 
-module.exports = function backup(options, aws) {
-  console.log('backup works');
+
+module.exports = function backup(options, slack) {
+  //console.log('backup works');
   //console.log('options are: ', options);
   var instanceid = options.instance;
   var all = options.all;
-
-
-  console.log('instanceid is: ', instanceid);
-  console.log('all is', all);
+  //console.log('instanceid is: ', instanceid);
+  //console.log('all is', all);
   //console.log('options are: ' + options[0]);
+
+  require('datejs');
 
   var params = {
     DryRun: false
@@ -39,7 +40,7 @@ module.exports = function backup(options, aws) {
         result.push(instance);
       });
     });
-    console.log('result of getInstanceDescription', result);
+    //console.log('result of getInstanceDescription', result);
     return result;
   }
 
@@ -53,11 +54,15 @@ module.exports = function backup(options, aws) {
         instance.State.Name
       );
 
+      var timestamp = new Date().toString('yyyyddMM-hhmmsstt');
+      //console.log('timestamp is', timestamp);
+      var displayTimestamp = new Date().toString('MM/dd/yyyy - hh:mm:ss tt');
+      //console.log('display timestamp is', displayTimestamp);
       var params = {
         InstanceId: instance.InstanceId, /* required */
-        Name: 'image of ' + instance.KeyName + '(' + instance.InstanceId + ')', /* required */
+        Name: 'image of ' + instance.KeyName + ' (' + instance.InstanceId + ') on ' + timestamp, /* required */
         //BlockDeviceMappings: instance.BlockDeviceMappings,
-        Description: 'backup generated using awsdr',
+        Description: 'backup generated using awsdr on ' + displayTimestamp,
         DryRun: false,
         NoReboot: true
       };
@@ -68,59 +73,30 @@ module.exports = function backup(options, aws) {
             'AMI has been queued',
             data.ImageId
           );
+          updateSlack('Hey @jame - the AMI backup (' + data.ImageId + ') has been queued for ' + instance.KeyName);
         })
-        .catch(console.error);
+        .catch(function(err) {
+          console.error(err);
+          updateSlack('an error occurred queuing AMI backup for ' + instance.KeyName);
+          updateSlack('here\'s the error message:');
+          updateSlack(err);
+        });
     });
   }
 
-  //var ec2 = new aws.EC2();
-  //
-  //ec2.describeInstances(params, function(err, data) {
-  //  if (err) {
-  //    // an error occurred
-  //    console.log(err, err.stack);
-  //  }
-  //  else {
-  //    // successful response
-  //    //todo: look at changing these calls to use promises
-  //    //https://github.com/jagregory/aws-es6-promise
-  //    _.forEach(data.Reservations, function(n, key) {
-  //
-  //      _.forEach(n.Instances, function(instance, key) {
-  //
-  //        console.log(
-  //          'starting backup of: ',
-  //          _.padRight(chalk.red(instance.InstanceId), 14, ' '),
-  //          _.padRight(instance.KeyName, 25, ' '),
-  //          _.padRight(chalk.blue(instance.PublicIpAddress), 20, ' '),
-  //          instance.State.Name
-  //        );
-  //
-  //        var params = {
-  //          InstanceId: instanceid, /* required */
-  //          Name: 'image of ' + instance.KeyName + '(' + instanceid + ')', /* required */
-  //          //BlockDeviceMappings: instance.BlockDeviceMappings,
-  //          Description: 'backup generated using awsdr',
-  //          DryRun: false,
-  //          NoReboot: true
-  //        };
-  //
-  //        ec2.createImage(params, function(err, data) {
-  //          if (err) {
-  //            // an error occurred
-  //            console.log(err, err.stack);
-  //          }
-  //          else {
-  //            // successful response
-  //            //console.log(data);
-  //            console.log(
-  //              'AMI has been queued',
-  //              data.ImageId
-  //            );
-  //          }
-  //        });
-  //      });
-  //    });
-  //  }
-  //});
+  function updateSlack(message) {
+    slack.webhook({
+      channel: process.env.SLACK_CHANNEL,
+      username: process.env.SLACK_USERNAME,
+      text: message
+    }, function(err, response) {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log('slack message sent: ' + message);
+      }
+    });
+  }
+
+
 };

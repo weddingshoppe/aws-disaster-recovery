@@ -16,10 +16,21 @@ var { version, name }               = require('../package.json');
 var chalk                           = require('chalk');
 var commands                        = require('./commands');
 var aws                             = require('aws-sdk');
+var Slack                           = require('slack-node');
 
 module.exports = function cli(args) {
 
-  aws.config.update({region: 'us-east-1'});
+  try {
+    require('dotenv').load();
+  } catch (e) {
+    console.log('No .env file loaded, using actual environment variables.');
+  }
+
+  aws.config.update({region: process.env.AWS_REGION});
+
+  var slack = new Slack();
+  slack.setWebhook(process.env.SLACK_URI);
+
 
   program
     .version(version)
@@ -41,8 +52,10 @@ module.exports = function cli(args) {
     .description('Creates an image of the input aws instance, optionally pass a filter string')
     .option('-i, --instance', 'Backup specified instance', '')
     .option('-a, --all', 'Backup all instances', true)
+    .option('-r, --no-reboot', 'Do not reboot the server when requesting the AMI image', true)
+    .option('-d, --dryrun', 'Do a dry run of the backup process', false)
     .action(function (options) {
-      commands.backup(options, aws);
+      commands.backup(options, slack);
         //.catch(function (error) {
         //  console.log(chalk.red(error.message));
         //  console.log(error.stack);
