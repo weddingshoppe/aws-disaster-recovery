@@ -1,32 +1,13 @@
 var _                 = require('lodash');
 var chalk             = require('chalk');
 
-module.exports = function list(filter, options, aws) {
-  console.log('list works');
-  console.log('filter is: ' + filter);
+module.exports = function list(options, aws) {
+  //console.log('list works');
+  //console.log('filter is: ' + filter);
   //console.log(JSON.stringify(options, null, 4));
-  filter = filter | '';
+
   var params = {
     DryRun: false
-    //,
-    //Filters: [
-    //  {
-    //    Name: 'KeyName',
-    //    Values: [filter]
-    //  }
-    //  {
-    //    Name: 'tag-value',
-    //    Values: [
-    //      filter
-    //    ]
-    //  }
-    //],
-    //InstanceIds: [
-    //  'STRING_VALUE',
-    //  /* more items */
-    //],
-    //MaxResults: 0,
-    //NextToken: '123456'
   };
 
   var awsPromised = require('aws-promised');
@@ -38,66 +19,30 @@ module.exports = function list(filter, options, aws) {
 
   function printContents(data) {
     //console.log(data); // contents of foo.txt
+    console.log(
+      _.padRight(chalk.green('InstanceId'), 20, ' '),
+      _.padRight(chalk.red('KeyName'), 30, ' '),
+      _.padRight('InstanceType', 20, ' '),
+      _.padRight(chalk.blue('PublicIpAddress'), 30, ' '),
+      _.padRight(chalk.green('Monitoring'), 30, ' '),
+      'State'
+    );
+    console.log(_.padRight('',120,'-'));
+
     _.forEach(data.Reservations, function(n, key) {
       //console.log(n, key);
+      //console.log(n);
       _.forEach(n.Instances, function(instance, key) {
         console.log(
-          _.padRight(chalk.green(instance.InstanceId), 14, ' '),
-          _.padRight(chalk.red(instance.KeyName), 25, ' '),
-          _.padRight(chalk.blue(instance.PublicIpAddress), 20, ' '),
+          _.padRight(chalk.green(instance.InstanceId), 20, ' '),
+          _.padRight(chalk.red(instance.KeyName), 30, ' '),
+          _.padRight(instance.InstanceType, 20, ' '),
+          _.padRight(chalk.blue(instance.PublicIpAddress || 'n/a'), 30, ' '),
+          _.padRight(chalk.green(instance.Monitoring.State == 'enabled' ? 'monitored' : 'not monitored'), 30, ' '),
           instance.State.Name
         );
       });
     });
   }
 
-
-  //ec2.describeInstances(params)
-  //  .then(function(data) {
-  //    _.forEach(data.Reservations, function(n, key) {
-  //      console.log(n, key);
-  //      _.forEach(n.Instances, function(instance, key) {
-  //        console.log(
-  //          _.padRight(chalk.green(instance.InstanceId), 14, ' '),
-  //          _.padRight(chalk.red(instance.KeyName), 25, ' '),
-  //          _.padRight(chalk.blue(instance.PublicIpAddress), 20, ' '),
-  //          instance.State.Name
-  //        );
-  //      });
-  //    });
-  //  }).catch(function(err) {
-  //    console.log('caught exception describing instances.');
-  //    console.log(err);
-  //  });
-
-  //ec2.describeInstances(params, function(err, data) {
-  //  if (err) {
-  //    // an error occurred
-  //    console.log(err, err.stack);
-  //  }
-  //  else {
-  //    // successful response
-  //    //console.log(data);
-  //    console.log('calling describeInstances was successful');
-  //
-  //    _.forEach(data.Reservations, function(n, key) {
-  //      //console.log('n is: ' + n);
-  //      //console.log(n, key);
-  //      //console.log('key is: ' + key);
-  //      //console.log('n.ReservationId is: ' + n.ReservationId);
-  //      _.forEach(n.Instances, function(instance, key) {
-  //        console.log(
-  //          _.padRight(chalk.orange(instance.InstanceId), 14, ' '),
-  //          _.padRight(chalk.red(instance.KeyName), 25, ' '),
-  //          _.padRight(chalk.blue(instance.PublicIpAddress), 20, ' '),
-  //          instance.State.Name
-  //        );
-  //        //console.log(instance.State);
-  //        //console.log('instance key is: ' + key);
-  //        //console.log('instance is: ' + instance);
-  //        //console.log('instance id is: ' + instance.InstanceId);
-  //      });
-  //    });
-  //  }
-  //});
 };

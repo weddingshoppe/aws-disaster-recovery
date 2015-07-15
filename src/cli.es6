@@ -1,15 +1,4 @@
-"use strict"
-
-//var Cli = require('soil-cli');
-//
-//class AwsdrCli extends Cli {
-//
-//  constructor(args, options) {
-//    super(args, options);
-//  }
-//}
-//
-//module.exports = AwsdrCli;
+"use strict";
 
 var program                         = require('commander');
 var { version, name }               = require('../package.json');
@@ -38,11 +27,11 @@ module.exports = function cli(args) {
 
   //list command - list all instances in the aws account we're setup to use
   program
-    .command('list [filter]')
+    .command('list')
     .alias('l')
     .description('list all instances in aws')
-    .action(function(filter, options) {
-      commands.list(filter, options, aws);
+    .action(function(options) {
+      commands.list(options, aws);
     });
 
   // new command
