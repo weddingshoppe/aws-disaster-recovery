@@ -36,26 +36,24 @@ module.exports = function cli(args) {
 
   // new command
   program
-    .command('backup')
+    .command('backup <type> [instanceId]')
     .alias('b')
-    .description('Creates an image of the input aws instance, optionally pass a filter string')
-    .option('-i, --instance', 'Backup specified instance', '')
-    .option('-a, --all', 'Backup all instances', true)
-    .option('-r, --no-reboot', 'Do not reboot the server when requesting the AMI image', true)
-    .option('-d, --dryrun', 'Do a dry run of the backup process', false)
-    .action(function (options) {
-      commands.backup(options, slack);
-        //.catch(function (error) {
-        //  console.log(chalk.red(error.message));
-        //  console.log(error.stack);
-        //});
+    .description('Creates an image of the aws instance(s), type param should be instance|all')
+    //.option('-i, --instanceid', 'Backup specified instance', '')
+    //.option('-a, --all [boolean]', 'Backup all instances', false)
+    .option('-r, --reboot [boolean]', 'Reboot the server when requesting the AMI image', false)
+    .option('-d, --dryrun [boolean]', 'Do a dry run of the backup process', false)
+    .option('--debug [boolean]', 'show extra debugging information', false)
+    .action(function (type, instanceId, options) {
+      //console.log('options:', options);
+      commands.backup(type, instanceId, options, slack);
     });
 
 
   //program.on('--help', function (){
   //  console.log('version: ' + version);
   //});
-
+  //console.log('args are', args);
   program.parse(args);
 
   if (!program.args.length || program.args[0] === 'help') {

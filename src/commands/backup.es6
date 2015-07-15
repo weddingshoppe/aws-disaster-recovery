@@ -2,24 +2,40 @@ var _                 = require('lodash');
 var chalk             = require('chalk');
 
 
-module.exports = function backup(options, slack) {
+module.exports = function backup(type, instanceId, options, slack) {
   //console.log('backup works');
-  //console.log('options are: ', options);
-  var instanceid = options.instance;
-  var all = options.all;
-  //console.log('instanceid is: ', instanceid);
-  //console.log('all is', all);
-  //console.log('options are: ' + options[0]);
+
+  var debug = (true === options.debug || 'true' === options.debug);
+  var all = (type === 'all');
+  var reboot = (true === options.reboot || 'true' === options.reboot);
+  var dryrun = (true === options.dryrun || 'true' === options.dryrun);
+  var debug = (true === options.debug || 'true' === options.debug);
+  if (debug) {
+    console.log(chalk.yellow(_.padRight('',120, '-')));
+    console.log(chalk.red(_.padRight('DEBUGGING INFO',120,' ')));
+    console.log(chalk.blue(_.padRight('type is', 30 , ' ')), type);
+    //console.log('options are: ', options);
+    //var instanceid = options.instanceid;
+    console.log(chalk.blue(_.padRight('debug is: ', 30, ' ')), debug);
+    console.log(chalk.blue(_.padRight('instanceid is: ', 30, ' ')), instanceId);
+    console.log(chalk.blue(_.padRight('all is:', 30, ' ')), all);
+    //console.log('reboot is ' + reboot);
+    console.log(chalk.blue(_.padRight('dryrun is: ', 30 , ' ')) + dryrun);
+    console.log(chalk.blue(_.padRight('reboot is: ', 30, ' ')), reboot);
+    //console.log('options are: ' + options[0]);
+    console.log(chalk.yellow(_.padRight('',120, '-')));
+  }
+
 
   require('datejs');
 
   var params = {
-    DryRun: false
+    DryRun: dryrun
   };
 
-  if (!all && instanceid && instanceid.length) {
+  if (!all && instanceId && instanceId.length) {
     params.InstanceIds = [
-      instanceid
+      instanceId
     ];
   }
 
@@ -33,7 +49,7 @@ module.exports = function backup(options, slack) {
     .catch(console.error);
 
   function getInstanceDescription(data) {
-    //console.log('in gxetInstanceDescription', data);
+    //console.log('in getInstanceDescription', data);
     var result = [];
     _.forEach(data.Reservations, function(n, key) {
       _.forEach(n.Instances, function(instance, key) {
@@ -62,7 +78,7 @@ module.exports = function backup(options, slack) {
         InstanceId: instance.InstanceId, /* required */
         Name: 'image of ' + instance.KeyName + ' (' + instance.InstanceId + ') on ' + timestamp, /* required */
         //BlockDeviceMappings: instance.BlockDeviceMappings,
-        Description: 'backup generated using awsdr on ' + displayTimestamp,
+        Description: instance.KeyName + ' backup generated using awsdr on ' + displayTimestamp,
         DryRun: false,
         NoReboot: true
       };
