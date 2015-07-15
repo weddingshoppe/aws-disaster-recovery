@@ -27,11 +27,14 @@ module.exports = function cli(args) {
 
   //list command - list all instances in the aws account we're setup to use
   program
-    .command('list')
+    .command('list [type]')
     .alias('l')
     .description('list all instances in aws')
-    .action(function(options) {
-      commands.list(options, aws);
+    .option('--details [boolean]', 'show a detailed listing (used to trigger showing volume snapshots for images)', false)
+    .option('--debug [boolean]', 'show extra debugging information', false)
+    .option('-d, --dryrun [boolean]', 'Do a dry run of the backup process', false)
+    .action(function(type, options) {
+      commands.list(type, options, aws);
     });
 
   // new command

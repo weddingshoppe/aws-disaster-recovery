@@ -36,6 +36,7 @@
     "dotenv": "^1.2.0",
     "eslint-config-standard": "^3.4.1",
     "lodash": "^3.9.3",
+    "moment": "^2.10.3",
     "resolve": "^1.1.6",
     "slack-node": "^0.1.3"
   },
