@@ -29,6 +29,11 @@ Project board: https://waffle.io/WeddingShoppe/aws-disaster-recovery
 
 `awsdr backup instance i-12345`
 
+### list all instances
+`awsdr list`
+
+### list all images (AMI's)
+`awsdr list images`
 
 project references
 --------------------------------------
