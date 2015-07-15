@@ -17,29 +17,27 @@ Issues: https://github.com/WeddingShoppe/aws-disaster-recovery/issues
 Project board: https://waffle.io/WeddingShoppe/aws-disaster-recovery
 
 
+
+## Example Usage
+----
+
+### backup all instances accessible to the account you are connecting with
+
+`awsdr backup all`
+
+### backup a specific instance
+
+`awsdr backup instance i-12345`
+
+
 project references
 --------------------------------------
 AWS Node API: http://aws.amazon.com/sdk-for-node-js/
+AWS API Promisified: https://github.com/CascadeEnergy/aws-promised
 
-CLI framework: https://github.com/terminalvelocity/soil-cli
+## Installation
 
-CLI Example:    https://github.com/terminalvelocity/seeds.js
-
-
-target backup procedure
-==========================
-- [ ] list details
-
-
-machine specific procedures
----------------------------------------
-- [ ] list details
-
-proper overall restore procedure
-==========================
-- [ ] list details
-
-
-machine specific procedures
----------------------------------------
-- [ ] list details
+ * install node or iojs
+ * install aws-disaster-recovery
+ * set environment variables for aws API credentials
+ * run `awsdr --help` or `awsdr --version` to verify it is installed.
